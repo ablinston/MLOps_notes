@@ -1,3 +1,16 @@
+---
+title: "ML Ops notes"
+author: ablinston
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      toc_collapsed: true
+    toc_depth: 3
+    number_sections: true
+    theme: lumen
+---
+
 # AutoML
 
 Automated machine learning is the process of automating the tasks of applying machine learning to real-world problems. It automates things like data cleaning/imputation/validation, feature engineering, training models, model selection and hyper-parameter choices.
