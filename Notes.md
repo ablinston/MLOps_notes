@@ -1,3 +1,7 @@
+<head><style>
+  h1 {margin-top: 50px;}
+</style></head>
+
 # AutoML
 
 Automated machine learning is the process of automating the tasks of applying machine learning to real-world problems. It automates things like data cleaning/imputation/validation, feature engineering, training models, model selection and hyper-parameter choices.
@@ -8,17 +12,21 @@ Automated machine learning is the process of automating the tasks of applying ma
 
 ![AutoML](img/automl.png "Title")
 
+
 # Cookiecutter
 
 A python library that allows us to install a cookie cutter folder structure for a data science project
+
 
 # CI/CD (Continuous Integration/Continuous Delivery)
 
 CI/CD automates your builds, testing, and deployment so you can ship code changes faster and more reliably. It’s basically having a dev version where you make and test changes on git which are then pushed to a beta and eventually live and deployed.
 
+
 # Docker
 
 Docker is an open platform for developing, shipping, and running applications. Docker enables you to separate your applications from your infrastructure so you can deliver software quickly.
+
 
 # DVC
 
@@ -52,15 +60,19 @@ dvc stage add -n train \
                 python src/train.py data/features model.pkl
 ```
 
+
 # MLFlow
+
 
 # Pre-commit
 A python library to check code. Before commiting code to Git, we can use pre-commit add-ons which interrogate the code and check that it is ok, such as `black, flake8, isort, interrogate`.
+
 
 # PyCharm
 Set up a new project, and you can create a new virtual environment to install packages. This is usually named `venv` and works like the renv package in R.
 
 After creating the project, on the left hand side, click Python Console, and here packages can be installed using `pip install package_name`. 
+
 
 # Targets
 This is an R package that can set up pipelines. To begin, go to the repo and do `use_targets()`.
@@ -92,6 +104,15 @@ Before running can check the pipeline by running `tar_manifest()`. Can use `tar_
 Can then use `tar_read()` or `tar_load()` e.g. `tar_read(plot) #name of the object in the tar_target`.
 Various performance options available at https://books.ropensci.org/targets/performance.html
 
+
+# Unit testing
+
+
+
+
+
+
+
 # Venv
 A virtual environment in python, much like renv in R. This creates an environment where you can install packages and track the version types.
 
@@ -104,15 +125,16 @@ Saving to Github: it is standard to do this through a requirements.txt file inst
 
 You can easily generate this file with the following: `pip freeze > requirements.txt` You can then install the virtualenv packages on the target machine with: `pip install -r requirements.txt` (after activating the venv!)
 
+
 # YAML
 YAML files contain configuration information from a script and uses indentation like python to set parameters. E.g.
 ```
 apiVersion: v3
 kind: Pod
 metadata:
-  	name: rss-site
-  	labels:
-    app: web
+	name: rss-site
+	labels:
+		app: web
 ```
 
 
