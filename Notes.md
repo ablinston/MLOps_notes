@@ -107,10 +107,41 @@ Various performance options available at https://books.ropensci.org/targets/perf
 
 # Unit testing
 
+`testthat` package in R. It works by telling it expectations
+
+There are more than 20 expectations in the testthat package where you can test the results from two values. They try to answer questions like:
+```
+# Are the values equal, equivalent or identical?
+expect_equal(x, y)
+expect_equivalent(x, y)
+expect_identical(x, y)
+
+# Does the code produce any output/message/warning/error?
+expect_output(x, y)
+expect_message(x, y)
+expect_warning(x, y)
+expect_error(x, y)
+
+# How does the returned value compare to a specified value?
+expect_lt(x, y)
+expect_lte(x, y)
+expect_gt(x, y)
+expect_gte(x, y)
+```
 
 
+We should have a folder named R with all the R code, and one folder named `tests/testthat`, where all the test scripts will live. For each file with R scripts there should be another one with tests, with the same name, but prefixed by `test_`, as shown:
+```
+R/my_program.R <=> tests/testthat/test_my_program.R
+```
+Each of these files should have a test (which can test more than one thing) like this:
 
-
+```
+test_that("Check commutative property", {
+    expect_identical(my_good_sum(4, 6), 10)
+    expect_identical(my_good_sum(6, 4), 10)
+})
+```
 
 
 # Venv
