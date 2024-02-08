@@ -63,6 +63,34 @@ dvc stage add -n train \
 
 # MLFlow
 
+MLflow is an open source platform for managing the end-to-end machine learning lifecycle. It has the following primary components:
+* Tracking: Allows you to track experiments to record and compare parameters and results.
+Models: Allow you to manage and deploy models from a variety of ML libraries to a variety of model serving and inference platforms.
+* Projects: Allow you to package ML code in a reusable, reproducible form to share with other data scientists or transfer to production.
+* Model Registry: Allows you to centralize a model store for managing models’ full lifecycle stage transitions: from staging to production, with capabilities for versioning and annotating. Databricks provides a managed version of the Model Registry in Unity Catalog.
+* Model Serving: Allows you to host MLflow Models as REST endpoints.
+
+### Code structure
+
+**Run script**
+This over-arching code runs the experiments, training and testing different versions of the model. It:
+* Sets the tracking URI
+* Defines the name of the experiments
+* Defines sets of hyperparameters, which are automatically logged with each run
+* Runs each experiment
+* Loads the MLflow UI (optional)
+
+![mlflow_run](img/mlflow_run.png)
+
+**Train & Test script**
+This code trains and tests a model using a set of hyperparameters passed through by the run script. It:
+* Loads data
+* Can include feature engineering
+* Fits a model with chosen hyperparameters
+* Tests the model and calculates required evaluation metrics
+* Logs metrics & artifacts
+
+![mlflow_train](img/mlflow_tt.png)
 
 # Pre-commit
 A python library to check code. Before commiting code to Git, we can use pre-commit add-ons which interrogate the code and check that it is ok, such as `black, flake8, isort, interrogate`.
