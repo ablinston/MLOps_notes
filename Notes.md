@@ -110,9 +110,9 @@ YAML files contain configuration information from a script and uses indentation 
 apiVersion: v3
 kind: Pod
 metadata:
-  		name: rss-site
-  		labels:
-    	app: web
+  	name: rss-site
+  	labels:
+    app: web
 ```
 
 
