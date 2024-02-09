@@ -92,6 +92,25 @@ This code trains and tests a model using a set of hyperparameters passed through
 
 ![mlflow_train](img/mlflow_tt.png)
 
+# Packaging in R
+
+Need the following tools
+
+```
+install.packages("devtools")
+install.packages("roxygen2")
+```
+
+The package needs a `DESCRIPTION` file in the root directory. Then documentation and building is done by
+
+```
+devtools::document(roclets = c("collate", "rd")) # without affecting the NAMESPACE file
+# or
+devtools::document()
+
+devtools::build(path = "/loc/package/")
+```
+
 # Pre-commit
 A python library to check code. Before commiting code to Git, we can use pre-commit add-ons which interrogate the code and check that it is ok, such as `black, flake8, isort, interrogate`.
 
@@ -170,7 +189,7 @@ test_that("Check commutative property", {
     expect_identical(my_good_sum(6, 4), 10)
 })
 ```
-
+Can run the whole thing with `devtools::test()`
 
 # Venv
 A virtual environment in python, much like renv in R. This creates an environment where you can install packages and track the version types.
