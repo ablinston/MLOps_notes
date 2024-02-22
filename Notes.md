@@ -35,8 +35,7 @@ DVC will push to a remote repo that stores all the historical data, like to an S
 
 ![DVC](img/dvc_code.png)
 
-(`commit –m` doesn’t seem to work any more, and its now `dvc push –r origin`)
-Set up credentials from a DAGShub repo like this. 
+(`commit –m` doesn’t seem to work any more, and its now `dvc push –r origin`). The `-r` relate to remote. A full list is given here: `-w|--workspace`, `-a|--all-branches`, `-T|--all-tags` `--all-experiments`, `--all-commits`, `--date` or `--rev` needs to be set.
 
 To use git in conjunction with dvc, you would first checkout a branch using `git checkout master` then you would update the data with `dvc pull`.
 
@@ -63,7 +62,7 @@ dvc stage add -n train \
                 -o model.pkl \
                 python src/train.py data/features model.pkl
 ```
-
+DVC stores lots of data in a cache. Can clean this up with `dvc gc -w`.
 
 # MLFlow
 
