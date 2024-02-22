@@ -36,7 +36,11 @@ DVC will push to a remote repo that stores all the historical data, like to an S
 ![DVC](img/dvc_code.png)
 
 (`commit –m` doesn’t seem to work any more, and its now `dvc push –r origin`)
-Set up credentials from a DAGShub repo like this. Get the code from here.
+Set up credentials from a DAGShub repo like this. 
+
+To use git in conjunction with dvc, you would first checkout a branch using `git checkout master` then you would update the data with `dvc pull`.
+
+Get the code from here.
 
 ![Dagshub](img/dagshub.png)
 
