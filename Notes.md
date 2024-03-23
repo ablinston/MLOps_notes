@@ -27,6 +27,61 @@ CI/CD automates your builds, testing, and deployment so you can ship code change
 
 Docker is an open platform for developing, shipping, and running applications. Docker enables you to separate your applications from your infrastructure so you can deliver software quickly.
 
+You use docker to create an image which contains both an OS and other software needed for the application. You do this by creating a Docker file in the repo then running a command.
+
+Docker has a lot of base images available online. For example, if you will be running an app on Ubuntu, you can search for Ubuntu here https://hub.docker.com/search?q=amazon%20linux and use `docker pull` in cmd prompt.
+
+A docker image is created using Dockerfile. This is a file you add to the repo and is a set of instructions of what to install in the environment to allow the app to run. An example Dockerfile is given below:
+
+```
+# Use the Amazon Linux base image
+FROM amazonlinux:latest
+
+# Install necessary packages for building Python
+RUN yum update -y && \
+    yum install -y gcc openssl-devel bzip2-devel libffi-devel wget tar gzip
+
+# Download and install Python 3.9.13
+RUN wget https://www.python.org/ftp/python/3.9.13/Python-3.9.13.tgz && \
+    tar -xzf Python-3.9.13.tgz && \
+    cd Python-3.9.13 && \
+    ./configure --enable-optimizations && \
+    make altinstall && \
+    cd .. && \
+    rm -rf Python-3.9.13* && \
+    ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+
+# Install pip
+RUN wget https://bootstrap.pypa.io/get-pip.py && \
+    python3 get-pip.py && \
+    rm get-pip.py
+
+# Copy requirements.txt file
+COPY requirements.txt /app/requirements.txt
+
+# Set working directory
+WORKDIR /app
+
+# Install Python library dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Set entrypoint or default command if needed
+ENTRYPOINT ["python"]
+CMD ["app.py"]
+
+
+```
+
+Once this is in the repo, cd to it in cmd prompt and use `docker build -t <name for image> .` (-t gives it a tag) Don't forget the full stop, which tells it the context for where the Dockerfile is.
+
+Using the same tag as one that exists will not remove the old image, it will just create a new image with the tag now referencing that. To remove an old image, you need to use `docker rmi <image name or id>`
+
+To run a docker base image and test out commands, simply open cmd and use `docker run -it amazonlinux` where -it means interactive. Or if it's something like a Shiny app, use `docker run -p 3838:3838 <image id or tag>` where `-p` means port. Then you access it with https://localhost:3838. Make sure you `EXPOSE 3838` in the Dockerfile.
+
+To use these commands, you need to make sure docker is running in the background.
+
+**Containers** are docker images that are running. **Images** are the static environments saved to be able to run an app.
+
 
 # DVC
 
@@ -63,6 +118,10 @@ dvc stage add -n train \
                 python src/train.py data/features model.pkl
 ```
 DVC stores lots of data in a cache. Can clean this up with `dvc gc -w`.
+
+# Kubernetes
+
+Kubernetes, also known as K8s, is an open-source system for automating deployment, scaling, and management of containerized applications.
 
 # MLFlow
 
