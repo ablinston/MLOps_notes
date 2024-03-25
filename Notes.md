@@ -249,6 +249,8 @@ After creating the project, on the left hand side, click Python Console, and her
 Managing package versions in R. To begin, use `renv::init()` then `renv::activate()`.
 The install packages with `renv::install("data.table")` and once done use `renv::snapshot()` to save all the versions in the renv.lock file.
 
+When cloning a repo and installing packages needed, use `renv::restore()`.
+
 # Targets
 This is an R package that can set up pipelines. To begin, go to the repo and do `use_targets()`.
 This will add a _targets.R file to the directory. In this, you add a pipeline
