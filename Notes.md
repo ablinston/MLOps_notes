@@ -2,6 +2,52 @@
   h1 {margin-top: 50px;}
 </style></head>
 
+# AWS
+
+## EC2
+
+An EC2 instance is like a virtual server where you can run things. You set it up through the AWS console https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Home:
+
+1. Click Lauch Instance
+2. Select an AMI (Linux is generally faster and Amazon linux is most efficient for EC2)
+3. Set the retention rule low, because sometimes passwords are saved and we don't want them recovered.
+4. Select a key pair. If you don't have one, create one and download the .ppk file
+5. In Security Group settings, if deploying an app, make sure the port you want to access via is open. Add a Custom TCP with the port number, and the source 0.0.0.0/0 to allow any IP to connect.
+6. Launch the instance
+7. After it's running set the elastic IP address if needed by going to the Elastic IP address section, creating one, ticking it, then Actions > Associate IP Address. Choose the instance to associate with.
+
+Then you need to connect to the instance with PuTTY (using SSH). 
+
+1. Open PuTTY
+2. Find the hostname. In EC2 instances webpage, click the instance and get the Public IPv4 DNS
+3. The host name should be `ec2-user@<full ip / weblink>`
+4. In PuTTY, click SSH > Auth > Credentials and link to the .ppk file in private key
+5. Click Open. You should now connect.
+
+If you want to deploy an app with docker, we need to install docker on the instance.
+
+```
+sudo yum install docker -y
+sudo service docker start
+sudo usermod -a -G docker ec2-user
+
+# Then need to login and pull an image
+sudo docker login --username ablinston --password-stdin
+
+# Enter username (not email) and password when prompted
+# THIS WILL SAVE YOUR PASSWORD UNENCRYPTED ON THE SERVER! REMOVE IT AFTER!!!
+
+sudo docker pull <id/image>
+
+# REMOVE THE SAVED PASSWORD
+sudo rm /root/.docker/config.json
+
+# Launch the image. This example is a shiny app with a port.
+sudo docker run -p 8080:8080 ablinston/uk_house_prices
+```
+
+
+
 # AutoML
 
 Automated machine learning is the process of automating the tasks of applying machine learning to real-world problems. It automates things like data cleaning/imputation/validation, feature engineering, training models, model selection and hyper-parameter choices.
@@ -26,6 +72,77 @@ CI/CD automates your builds, testing, and deployment so you can ship code change
 # Docker
 
 Docker is an open platform for developing, shipping, and running applications. Docker enables you to separate your applications from your infrastructure so you can deliver software quickly.
+
+You use docker to create an image which contains both an OS and other software needed for the application. You do this by creating a Docker file in the repo then running a command.
+
+Docker has a lot of base images available online. For example, if you will be running an app on Ubuntu, you can search for Ubuntu here https://hub.docker.com/search?q=amazon%20linux and use `docker pull` in cmd prompt.
+
+A docker image is created using Dockerfile. This is a file you add to the repo and is a set of instructions of what to install in the environment to allow the app to run. An example Dockerfile is given below:
+
+```
+# Use the Amazon Linux base image
+FROM python:3.9
+
+# Install necessary packages for building Python
+#RUN yum update -y && \
+#    yum install -y gcc openssl-devel bzip2-devel libffi-devel wget tar gzip zlib-devel
+
+WORKDIR /home/app
+# Copy whole directory to the container
+COPY requirements.txt .
+
+# Install Python library dependencies
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+# Add user an change working directory and user
+RUN addgroup --system app && adduser --system --ingroup app app
+RUN chown app:app -R /home/app
+USER app
+
+# Download and install Python 3.9.13
+#RUN wget https://www.python.org/ftp/python/3.9.13/Python-3.9.13.tgz && \
+#    tar -xzf Python-3.9.13.tgz && \
+#    cd Python-3.9.13 && \
+#    ./configure --enable-optimizations && \
+#    make altinstall && \
+#    cd .. && \
+#    rm -rf Python-3.9.13* && \
+#    ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+
+# Install pip
+#RUN wget https://bootstrap.pypa.io/get-pip.py && \
+#    python3 get-pip.py && \
+#    rm get-pip.py
+
+# Copy whole directory to the container
+COPY . .
+
+# Expose the port
+EXPOSE 8080
+
+# Set entrypoint or default command if needed
+#ENTRYPOINT ["python"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
+
+# 0.0.0.0 means it will run on any local port
+```
+
+Once this is in the repo, cd to it in cmd prompt and use `docker build -t <name for image> .` (-t gives it a tag) Don't forget the full stop, which tells it the context for where the Dockerfile is.
+
+Using the same tag as one that exists will not remove the old image, it will just create a new image with the tag now referencing that. To remove an old image, you need to use `docker rmi <image name or id>`
+
+To run a docker base image and test out commands, simply open cmd and use `docker run -it amazonlinux` where -it means interactive. Or if it's something like a Shiny app, use `docker run -p 3838:3838 <image id or tag>` where `-p` means port. Then you access it with https://localhost:3838. Make sure you `EXPOSE 3838` in the Dockerfile.
+
+To configure with Dockerhub, you would include the full name of the repo in the image build like this:
+
+```
+docker build -t ablinston/uk_house_prices
+docker push ablinston/uk_house_prices:tagname
+```
+
+To use these commands, you need to make sure docker is running in the background.
+
+**Containers** are docker images that are running. **Images** are the static environments saved to be able to run an app.
 
 
 # DVC
@@ -63,6 +180,10 @@ dvc stage add -n train \
                 python src/train.py data/features model.pkl
 ```
 DVC stores lots of data in a cache. Can clean this up with `dvc gc -w`.
+
+# Kubernetes
+
+Kubernetes, also known as K8s, is an open-source system for automating deployment, scaling, and management of containerized applications.
 
 # MLFlow
 
