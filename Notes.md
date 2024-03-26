@@ -32,7 +32,7 @@ sudo service docker start
 sudo usermod -a -G docker ec2-user
 
 # Then need to login and pull an image
-sudo docker login --username ablinston --password-stdin
+sudo docker login
 
 # Enter username (not email) and password when prompted
 # THIS WILL SAVE YOUR PASSWORD UNENCRYPTED ON THE SERVER! REMOVE IT AFTER!!!
@@ -88,7 +88,7 @@ FROM python:3.9
 #    yum install -y gcc openssl-devel bzip2-devel libffi-devel wget tar gzip zlib-devel
 
 WORKDIR /home/app
-# Copy whole directory to the container
+# Copy the python library requirements to the container
 COPY requirements.txt .
 
 # Install Python library dependencies
@@ -124,7 +124,7 @@ EXPOSE 8080
 #ENTRYPOINT ["python"]
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
 
-# 0.0.0.0 means it will run on any local port
+# 0.0.0.0 means it will run on any local ip
 ```
 
 Once this is in the repo, cd to it in cmd prompt and use `docker build -t <name for image> .` (-t gives it a tag) Don't forget the full stop, which tells it the context for where the Dockerfile is.
