@@ -185,6 +185,20 @@ DVC stores lots of data in a cache. Can clean this up with `dvc gc -w`.
 
 Kubernetes, also known as K8s, is an open-source system for automating deployment, scaling, and management of containerized applications.
 
+
+# Git
+
+### Rebase issues
+```
+error: Unable to create '/x/.git/index.lock': File exists.
+```
+This error seems to be fixed by continuously removing the lock file and retrying rebase
+
+```
+rm -f './.git/index.lock'
+git rebase --continue
+```
+
 # MLFlow
 
 MLflow is an open source platform for managing the end-to-end machine learning lifecycle. It has the following primary components:
