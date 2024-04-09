@@ -325,7 +325,7 @@ Can run the whole thing with `devtools::test()`
 A virtual environment in python, much like renv in R. This creates an environment where you can install packages and track the version types.
 
 * You start by creating the environment `py –3.7 –m venv <directory>`. This will copy the packages already installed on your system. (don’t have to include version number if you don’t want to)
-* You then activate it with (Windows) `venv\Scripts\activate.bat` (run this in the cmd prompt by just typing the path)
+* You then activate it with (Windows) `venv\Scripts\activate.bat` (run this in the cmd prompt by just typing the path). If using Visual Studio, click Python on the left bar, the in workspace environments, click `Open in terminal` next to the venv.
 * Now as long as this is activated, pip will install packages in this virtual environment.
 * Once finished, deactivate the environment in case you’re running something else with `deactivate`
 
