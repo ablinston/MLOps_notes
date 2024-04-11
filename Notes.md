@@ -281,7 +281,7 @@ list(
   tar_target(plot, plot_model(model, data))
 )
 ```
-The pipeline removes the need to save outputs, because each target object that is made is saved in memory and can be loaded. It will also detect changes in inputs, even if the input is just the path to a file `file.csv`. It will detect changes to the hash of the file.
+The pipeline removes the need to save outputs, because each target object that is made is saved in memory and can be loaded. It will also detect changes in input files if the input is just the path to a file, like in the example above with `file.csv`. It will detect changes to the hash of the file if the format is set as `file`.
 
 All target script files have these requirements.
 * Load the packages needed to define the pipeline, e.g. targets itself.2
