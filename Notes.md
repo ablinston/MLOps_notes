@@ -281,12 +281,15 @@ list(
   tar_target(plot, plot_model(model, data))
 )
 ```
+The pipeline removes the need to save outputs, because each target object that is made is saved in memory and can be loaded.
 
 All target script files have these requirements.
 * Load the packages needed to define the pipeline, e.g. targets itself.2
-* Use tar_option_set() to declare the packages that the targets themselves need, as well as other settings such as the default storage format.
+* Use `tar_option_set()` to declare the packages that the targets themselves need, as well as other settings such as the default storage format.
 * Load your custom functions and small input objects into the R session: in our case, with source("R/functions.R").
 * Write the pipeline at the bottom of _targets.R. A pipeline is a list of target objects, which you can create with tar_target(). Each target is a step of the analysis. It looks and feels like a variable in R, but during tar_make(), it will reproducibly store a value in _targets/objects/.
+
+### Usage
 
 Before running can check the pipeline by running `tar_manifest()`. Can use `tar_visnetwork()` to show it visually, and that will also show what parts are outdated with a lighter colour.
 
@@ -295,6 +298,16 @@ Before running can check the pipeline by running `tar_manifest()`. Can use `tar_
 Can then use `tar_read()` or `tar_load()` e.g. `tar_read(plot) #name of the object in the tar_target`.
 Various performance options available at https://books.ropensci.org/targets/performance.html
 
+### Recommendations
+
+* Each target incurs overhead, so it is better to create fewer large targets than many fast targets.
+* Default storage is Rds which is slow. Can change this with `tar_option_set(format = "qs")` or `"feather"` (but that will only work with data frames).
+* By default, tar_make() keeps all target data in memory while it is running. To free superfluous data and consume less memory, activate transient memory and garbage collection: 
+```
+tar_option_set(memory = "transient", garbage_collection = TRUE)
+tar_make(garbage_collection = TRUE)
+```
+* Parallel processing is possible. Look it up.
 
 # Unit testing
 
