@@ -265,6 +265,20 @@ The install packages with `renv::install("data.table")` and once done use `renv:
 
 When cloning a repo and installing packages needed, use `renv::restore()`.
 
+# Symlinks
+
+Create a folder in a local area which actually links to a shared area. On linux systems, these are created using command line
+
+```
+ln -s <path to the file/folder to be linked> <the path of the link to be created>
+
+# eg.
+
+ln -s /server/folder/  ./
+```
+
+The example creates a new folder named `folder` within the working directory.
+
 # Targets
 This is an R package that can set up pipelines. To begin, go to the repo and do `use_targets()`.
 This will add a _targets.R file to the directory. In this, you add a pipeline
