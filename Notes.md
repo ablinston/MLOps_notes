@@ -126,6 +126,7 @@ CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
 
 # 0.0.0.0 means it will run on any local ip
 ```
+Each line of the Dockerfile is saved as a layer. This makes rebuilding faster if it is changed, but does affect the size of the image if too many processes are split.
 
 Once this is in the repo, cd to it in cmd prompt and use `docker build -t <name for image> .` (-t gives it a tag) Don't forget the full stop, which tells it the context for where the Dockerfile is.
 
@@ -142,7 +143,7 @@ docker push ablinston/uk_house_prices:tagname
 
 To use these commands, you need to make sure docker is running in the background.
 
-**Containers** are docker images that are running. **Images** are the static environments saved to be able to run an app.
+**Containers** are docker images that are running. **Images** are the static environments saved to be able to run an app. **Volumes** are what are mounted to containers. Volumes survive container deletion unless you specifically remove them to when deleting.
 
 
 # DVC
@@ -185,6 +186,29 @@ DVC stores lots of data in a cache. Can clean this up with `dvc gc -w`.
 
 Kubernetes, also known as K8s, is an open-source system for automating deployment, scaling, and management of containerized applications.
 
+![Kubernetes](img/kubernetes.jpg "Title")
+
+Kubelets are a management program on a node. They handle the containers and pods that are opened on the machine, and listen in to the API brain to await instruction on what to do. When containers fail, they automatically relaunch them.
+
+**Deployment** is not done by starting pods yourself. You tell the controller what you want, e.g. I want 1 pod running X image with Y configuration, and it will work until that is achieved.
+
+A **Service** is a fixed name and a fixed address that stays the same forever and forwards traffic to whichever pods currently match its label selector. Pods come and go behind it, and anything using the Service doesn't notice.
+
+Two parts to Ingress:
+- The Ingress resource is a YAML object containing routing rules ("this hostname goes to this Service"). On its own it does nothing. It's just a record in the API server.
+- The Ingress controller is the actual program that receives web traffic and follows those rules. It's a reverse proxy running as pods in the cluster. 
+
+Full process of connecting as a user:
+
+```
+browser: http://mlflow-sandbox.home
+  → DNS: "mlflow-sandbox.home is the Pi's IP"          (router or Pi-hole, outside Kubernetes)
+  → Pi port 80: nginx, server_name *.home                   (your existing front door)
+  → proxy to Traefik on port 8081                      (Ingress controller)
+  → Ingress rule: host matches, go to Service mlflow:80
+  → Service: forward to the current pod on 5000
+  → MLflow
+```
 
 # Git
 
